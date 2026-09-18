@@ -1,17 +1,78 @@
-const express = require('express');
+const userModel = require('../models/user-model');
+const catModel = require('../models/cat-model');
+const getUsers = async (req, res) => {
+  try {
+    const users = await userModel.getAllUsers();
+    res.json(users);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message: 'Database error'});
+  }
+};
 
-const userController = require('../controllers/user-controller');
+const getUserById = async (req, res) => {
+  try {
+    const user = await userModel.getUserById(req.params.id);
+    res.json(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message: 'Database error'});
+  }
+};
 
-const router = express.Router();
+const addUser = async (req, res) => {
+  try {
+    const id = await userModel.addUser(req.body);
 
-router.get('/', userController.getUsers);
+    res.status(201).json({
+      message: 'User added',
+      user_id: id
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message: 'Database error'});
+  }
+};
 
-router.get('/:id', userController.getUserById);
+const updateUser = async (req, res) => {
+  try {
+    await userModel.updateUser(req.params.id, req.body);
 
-router.post('/', userController.addUser);
+    res.json({
+      message: 'User updated'
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message: 'Database error'});
+  }
+};
 
-router.put('/:id', userController.updateUser);
+const deleteUser = async (req, res) => {
+  try {
+    await userModel.deleteUser(req.params.id);
 
-router.delete('/:id', userController.deleteUser);
-
-module.exports = router;
+    res.json({
+      message: 'User deleted'
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message: 'Database error'});
+  }
+};
+const getUserCats = async (req, res) => {
+  try {
+    const cats = await catModel.getCatsByUser(req.params.id);
+    res.json(cats);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message: 'Database error'});
+  }
+};
+module.exports = {
+  getUsers,
+  getUserById,
+  addUser,
+  updateUser,
+  deleteUser,
+  getUserCats
+};

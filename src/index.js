@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const catRouter = require('./api/routes/cat-router');
 const userRouter = require('./api/routes/user-router');
