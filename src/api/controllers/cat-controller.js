@@ -22,10 +22,12 @@ const getCatById = (req, res) => {
 
 const addCat = (req, res) => {
   const newCat = req.body;
+  const file = req.file;
 
   res.status(201).json({
     message: 'Cat added',
-    cat: newCat
+    cat: newCat,
+    file: file
   });
 };
 
